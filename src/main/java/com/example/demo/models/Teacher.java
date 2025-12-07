@@ -1,39 +1,21 @@
 package com.example.demo.models;
-
 import jakarta.persistence.*;
-
+import lombok.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "teachers")
-public class Teacher extends Human{
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate hiredate;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    private User user;
+
+    private LocalDate hireDate;
+    @Column(columnDefinition = "TEXT")
     private String description;
-
-    public LocalDate getHiredate() {
-        return hiredate;
-    }
-
-    public void setHiredate(LocalDate hiredate) {
-        this.hiredate = hiredate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
