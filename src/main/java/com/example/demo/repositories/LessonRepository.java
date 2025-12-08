@@ -10,6 +10,4 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     List<Lesson> findByGroup_IdAndLessonDateTimeBetween(Long groupId, LocalDateTime start, LocalDateTime end);
     // Найти уроки учителя за период
     List<Lesson> findByTeacher_IdAndLessonDateTimeBetween(Long teacherId, LocalDateTime start, LocalDateTime end);
-    // Найти уроки группы на сегодня
-    List<Lesson> findByGroup_IdAndLessonDateTimeBetween(Long groupId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

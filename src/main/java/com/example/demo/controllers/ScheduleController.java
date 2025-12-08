@@ -15,12 +15,12 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @GetMapping("/group/{groupId}")
-    public List<ScheduleEntryDto> getScheduleForGroup(@PathVariable Long groupId) {
+    public List<ScheduleEntryDto> getGroupSchedule(@PathVariable Long groupId) {
         return scheduleService.getScheduleForGroup(groupId);
     }
 
     @GetMapping("/teacher/{teacherId}")
-    public List<ScheduleEntryDto> getScheduleForTeacher(@PathVariable Long teacherId) {
+    public List<ScheduleEntryDto> getTeacherSchedule(@PathVariable Long teacherId) {
         return scheduleService.getScheduleForTeacher(teacherId);
     }
 }

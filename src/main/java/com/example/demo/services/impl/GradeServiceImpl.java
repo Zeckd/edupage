@@ -1,15 +1,19 @@
 package com.example.demo.services.impl;
 
-import com.example.demo.mappers.GradeAttendanceMapper;
-import com.example.demo.models.*;
-import com.example.demo.models.dtos.*;
-import com.example.demo.repositories.*;
+import com.example.demo.mappers.GradeMapper;
+import com.example.demo.models.Grade;
+import com.example.demo.models.Lesson;
+import com.example.demo.models.Student;
+import com.example.demo.models.dtos.GradeRequestDto;
+import com.example.demo.models.dtos.StudentGradesListDto;
+import com.example.demo.repositories.GradeRepository;
+import com.example.demo.repositories.LessonRepository;
+import com.example.demo.repositories.StudentRepository;
 import com.example.demo.services.GradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 import java.util.List;
 
 @Service
@@ -19,7 +23,7 @@ public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
     private final LessonRepository lessonRepository;
     private final StudentRepository studentRepository;
-    private final GradeAttendanceMapper mapper;
+    private final GradeMapper mapper;
 
     @Override
     public Grade addGrade(GradeRequestDto dto) {
@@ -46,7 +50,7 @@ public class GradeServiceImpl implements GradeService {
     public List<StudentGradesListDto> getStudentGrades(Long studentId) {
         return gradeRepository.findByStudentId(studentId)
                 .stream()
-                .map(mapper::toStudentGradesListDto)
-                .collect(Collectors.toList());
+                .map(mapper::toStudentGradeDto)
+                .toList();
     }
 }

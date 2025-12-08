@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.Lesson;
+import com.example.demo.models.dtos.LessonCreateDto;
 import com.example.demo.models.dtos.LessonDto;
 import com.example.demo.services.LessonService;
 import lombok.RequiredArgsConstructor;
@@ -15,19 +15,23 @@ public class LessonController {
 
     private final LessonService lessonService;
 
-    @GetMapping
-    public List<LessonDto> getAllLessons() {
-        return lessonService.getAllLessons();
+    @PostMapping
+    public LessonDto create(@RequestBody LessonCreateDto dto) {
+        return lessonService.create(dto);
     }
 
     @GetMapping("/{id}")
-    public LessonDto getLesson(@PathVariable Long id) {
-        return lessonService.getLessonById(id);
+    public LessonDto find(@PathVariable Long id) {
+        return lessonService.findById(id);
     }
 
-    @PostMapping
-    public Lesson createLesson(@RequestBody Lesson lesson) {
-        return lessonService.createLesson(lesson);
+    @GetMapping("/group/{groupId}")
+    public List<LessonDto> getByGroup(@PathVariable Long groupId) {
+        return lessonService.findByGroup(groupId);
+    }
+
+    @GetMapping("/teacher/{teacherId}")
+    public List<LessonDto> getByTeacher(@PathVariable Long teacherId) {
+        return lessonService.findByTeacher(teacherId);
     }
 }
-

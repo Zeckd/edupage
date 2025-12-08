@@ -1,8 +1,11 @@
 package com.example.demo.services;
 
-import com.example.demo.models.Homework;
+import com.example.demo.models.dtos.HomeworkDto;
+import com.example.demo.models.dtos.HomeworkRequestDto;
 
 public interface HomeworkService {
-    Homework setHomework(Long lessonId, String description, String deadline);
-    Homework getLessonHomework(Long lessonId);
+
+    HomeworkDto setHomework(Long lessonId, HomeworkRequestDto dto);
+
+    HomeworkDto getHomeworkByLesson(Long lessonId);
 }

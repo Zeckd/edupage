@@ -14,14 +14,23 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
+    @PostMapping("/create")
+    public Student create(@RequestParam Long userId, @RequestParam Long groupId) {
+        return studentService.create(userId, groupId);
+    }
 
     @GetMapping("/group/{groupId}")
-    public List<Student> getStudentsByGroup(@PathVariable Long groupId) {
+    public List<StudentStatusDto> getStudentsByGroup(@PathVariable Long groupId) {
         return studentService.getStudentsByGroup(groupId);
     }
 
     @GetMapping("/{id}/attendance")
-    public List<StudentStatusDto> getStudentAttendance(@PathVariable Long id) {
+    public List<?> getAttendance(@PathVariable Long id) {
         return studentService.getStudentAttendance(id);
+    }
+
+    @GetMapping("/{id}/grades")
+    public List<?> getGrades(@PathVariable Long id) {
+        return studentService.getStudentGrades(id);
     }
 }

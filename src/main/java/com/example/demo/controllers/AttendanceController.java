@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-
 import com.example.demo.models.dtos.AttendanceRequestDto;
 import com.example.demo.models.dtos.LessonAttendanceDto;
 import com.example.demo.services.AttendanceService;
@@ -15,12 +14,12 @@ public class AttendanceController {
     private final AttendanceService attendanceService;
 
     @PostMapping("/set")
-    public void setAttendance(@RequestBody AttendanceRequestDto dto) {
+    public void set(@RequestBody AttendanceRequestDto dto) {
         attendanceService.setAttendance(dto);
     }
 
     @GetMapping("/lesson/{lessonId}")
-    public LessonAttendanceDto getLessonAttendance(@PathVariable Long lessonId) {
+    public LessonAttendanceDto getLesson(@PathVariable Long lessonId) {
         return attendanceService.getLessonAttendance(lessonId);
     }
 }

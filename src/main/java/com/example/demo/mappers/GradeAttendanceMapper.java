@@ -9,14 +9,14 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface GradeAttendanceMapper {
 
-
-    @Mapping(target = "lessonDateTime", source = "attendance.lesson.lessonDateTime")
-    @Mapping(target = "subjectName", source = "attendance.lesson.subject.name")
-    @Mapping(target = "teacherFullName", expression = "java(attendance.getLesson().getTeacher().getUser().getFirstName() + \" \" + attendance.getLesson().getTeacher().getUser().getLastName())")
-    StudentAttendanceReportDto toAttendanceReportDto(Attendance attendance);
-
-
-    @Mapping(target = "subjectName", source = "grade.lesson.subject.name")
-    @Mapping(target = "gradeId", source = "grade.id")
-    StudentGradesListDto toStudentGradesListDto(Grade grade);
+//
+//    @Mapping(target = "lessonDateTime", source = "attendance.lesson.lessonDateTime")
+//    @Mapping(target = "subjectName", source = "attendance.lesson.subject.name")
+//    @Mapping(target = "teacherFullName", expression = "java(attendance.getLesson().getTeacher().getUser().getFirstName() + \" \" + attendance.getLesson().getTeacher().getUser().getLastName())")
+//    StudentAttendanceReportDto toAttendanceReportDto(Attendance attendance);
+//
+//
+//    @Mapping(target = "subjectName", source = "grade.lesson.subject.name")
+//    @Mapping(target = "gradeId", source = "grade.id")
+//    StudentGradesListDto toStudentGradesListDto(Grade grade);
 }

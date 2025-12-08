@@ -4,12 +4,11 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class LessonDto {
-    private Long id;
+public class LessonCreateDto {
     private LocalDateTime lessonDateTime;
     private int durationMinutes;
-
-    private String groupName;
-    private String subjectName;
-    private String teacherName;
+    private Long scheduleEntryId;
+    private Long groupId;
+    private Long subjectId;
+    private Long teacherId;
 }

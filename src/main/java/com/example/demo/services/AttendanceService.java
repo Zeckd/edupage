@@ -7,7 +7,10 @@ import com.example.demo.models.dtos.LessonAttendanceDto;
 import java.util.List;
 
 public interface AttendanceService {
-    void saveAttendance(AttendanceRequestDto dto);
+
+    void setAttendance(AttendanceRequestDto dto);
+
     LessonAttendanceDto getLessonAttendance(Long lessonId);
+
     List<Attendance> getStudentAttendance(Long studentId);
 }

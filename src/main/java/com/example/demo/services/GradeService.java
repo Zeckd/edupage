@@ -7,6 +7,8 @@ import com.example.demo.models.dtos.StudentGradesListDto;
 import java.util.List;
 
 public interface GradeService {
+
     Grade addGrade(GradeRequestDto dto);
+
     List<StudentGradesListDto> getStudentGrades(Long studentId);
 }
