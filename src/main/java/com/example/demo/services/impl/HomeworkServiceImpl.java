@@ -19,7 +19,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     private final HomeworkRepository homeworkRepository;
     private final LessonRepository lessonRepository;
-    private final HomeworkMapper mapper;
+    private final HomeworkMapper homeworkMapper;
 
     @Override
     public HomeworkDto setHomework(Long lessonId, HomeworkRequestDto dto) {
@@ -35,13 +35,13 @@ public class HomeworkServiceImpl implements HomeworkService {
 
         hw = homeworkRepository.save(hw);
 
-        return mapper.toDto(hw);
+        return homeworkMapper.toDto(hw);
     }
 
     @Override
     public HomeworkDto getHomeworkByLesson(Long lessonId) {
         return homeworkRepository.findByLessonId(lessonId)
-                .map(mapper::toDto)
+                .map(homeworkMapper::toDto)
                 .orElse(null);
     }
 }

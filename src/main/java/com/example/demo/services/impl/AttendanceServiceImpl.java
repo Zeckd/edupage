@@ -7,6 +7,7 @@ import com.example.demo.models.Lesson;
 import com.example.demo.models.Student;
 import com.example.demo.models.dtos.AttendanceRequestDto;
 import com.example.demo.models.dtos.LessonAttendanceDto;
+import com.example.demo.models.dtos.StudentStatusDto;
 import com.example.demo.repositories.AttendanceRepository;
 import com.example.demo.repositories.LessonRepository;
 import com.example.demo.repositories.StudentRepository;
@@ -23,7 +24,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final LessonRepository lessonRepository;
     private final StudentRepository studentRepository;
-    private final AttendanceMapper mapper;
+    private final AttendanceMapper attendanceMapper;
 
     @Override
     public void setAttendance(AttendanceRequestDto dto) {
@@ -33,7 +34,6 @@ public class AttendanceServiceImpl implements AttendanceService {
         dto.getStudents().forEach(st -> {
             Student student = studentRepository.findById(st.getStudentId())
                     .orElseThrow(() -> new RuntimeException("Student not found"));
-
             Attendance attendance = attendanceRepository
                     .findByLessonIdAndStudentId(lesson.getId(), student.getId())
                     .orElseGet(() -> attendanceRepository.save(
@@ -58,10 +58,25 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         List<Attendance> attendances = attendanceRepository.findByLessonId(lessonId);
 
-        LessonAttendanceDto dto =
-                mapper.toLessonAttendanceDto(attendances.get(0));
+        LessonAttendanceDto dto = new LessonAttendanceDto();
+        dto.setLessonId(lessonId);
+        dto.setSubjectName(lesson.getSubject() != null ? lesson.getSubject().getName() : "");
+        dto.setGroupName(lesson.getGroup() != null ? lesson.getGroup().getName() : "");
+        dto.setLessonDateTime(lesson.getLessonDateTime());
 
-        dto.setStudents(mapper.toStudentStatusList(attendances));
+        if (attendances.isEmpty()) {
+            List<Student> students = studentRepository.findByGroupId(lesson.getGroup().getId());
+            dto.setStudents(students.stream().map(student -> {
+                StudentStatusDto statusDto = new StudentStatusDto();
+                statusDto.setStudentId(student.getId());
+                statusDto.setStudentFullName(student.getUser().getFirstName() + " " + student.getUser().getLastName());
+                statusDto.setStatus(com.example.demo.enums.AttendanceStatus.PRESENT);
+                return statusDto;
+            }).toList());
+        } else {
+            dto.setStudents(attendanceMapper.toStudentStatusList(attendances));
+        }
+        
         return dto;
     }
 

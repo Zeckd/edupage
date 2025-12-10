@@ -23,7 +23,7 @@ public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
     private final LessonRepository lessonRepository;
     private final StudentRepository studentRepository;
-    private final GradeMapper mapper;
+    private final GradeMapper gradeMapper;
 
     @Override
     public Grade addGrade(GradeRequestDto dto) {
@@ -50,7 +50,7 @@ public class GradeServiceImpl implements GradeService {
     public List<StudentGradesListDto> getStudentGrades(Long studentId) {
         return gradeRepository.findByStudentId(studentId)
                 .stream()
-                .map(mapper::toStudentGradeDto)
+                .map(gradeMapper::toStudentGradesListDto)
                 .toList();
     }
 }

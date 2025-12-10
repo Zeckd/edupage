@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель учителя - EduPage</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/teacher.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>EduPage</h2>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('schedule')" class="active">Расписание</a></li>
+                    <li><a href="#" onclick="showSection('lessons')">Уроки</a></li>
+                    <li><a href="#" onclick="showSection('grades')">Оценки</a></li>
+                    <li><a href="#" onclick="showSection('attendance')">Посещаемость</a></li>
+                    <li><a href="#" onclick="showSection('homework')">Домашние задания</a></li>
+                    <li><a href="#" onclick="logout()">Выход</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Панель учителя</h1>
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <div class="notification-bell" onclick="showNotifications()">
+                        🔔
+                        <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">Выход</button>
+                </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div id="schedule-section" class="section">
+                <div class="card">
+                    <h3>Мое расписание</h3>
+                    <div id="scheduleContent"></div>
+                </div>
+            </div>
+
+            <!-- Lessons Section -->
+            <div id="lessons-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Мои уроки</h3>
+                    <button class="btn btn-success" onclick="showAddLessonModal()">Создать урок</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Дата и время</th>
+                                <th>Предмет</th>
+                                <th>Группа</th>
+                                <th>Длительность</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lessonsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Grades Section -->
+            <div id="grades-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Выставление оценок</h3>
+                    <div class="form-group">
+                        <label>Выберите урок</label>
+                        <select id="gradeLessonSelect"></select>
+                    </div>
+                    <div id="gradesContent"></div>
+                </div>
+            </div>
+
+            <!-- Attendance Section -->
+            <div id="attendance-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Посещаемость</h3>
+                    <div class="form-group">
+                        <label>Выберите урок</label>
+                        <select id="attendanceLessonSelect"></select>
+                    </div>
+                    <div id="attendanceContent"></div>
+                </div>
+            </div>
+
+            <!-- Homework Section -->
+            <div id="homework-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Домашние задания</h3>
+                    <div class="form-group">
+                        <label>Выберите урок</label>
+                        <select id="homeworkLessonSelect"></select>
+                    </div>
+                    <div id="homeworkContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Lesson Modal -->
+    <div id="addLessonModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addLessonModal')">&times;</span>
+            <h2>Создать урок</h2>
+            <form id="addLessonForm">
+                <div class="form-group">
+                    <label>Дата и время</label>
+                    <input type="datetime-local" id="lessonDateTime" required>
+                </div>
+                <div class="form-group">
+                    <label>Длительность (минуты)</label>
+                    <input type="number" id="lessonDuration" value="45" required>
+                </div>
+                <div class="form-group">
+                    <label>Группа</label>
+                    <select id="lessonGroup" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Предмет</label>
+                    <select id="lessonSubject" required></select>
+                </div>
+                <button type="submit" class="btn btn-success">Создать</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2/lib/stomp.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/teacher.js"></script>
+</body>
+</html>
+

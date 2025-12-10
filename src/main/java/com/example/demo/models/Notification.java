@@ -15,7 +15,7 @@ public class Notification {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    private User recipient; // Уведомление для конкретного пользователя (Учителя/Студента)
+    private User recipient;
 
     private boolean readFlag;
 }

@@ -66,7 +66,6 @@ public class StudentServiceImpl implements StudentService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
-        // Check if user already has student record
         studentRepository.findByUserId(userId).ifPresent(s -> {
             throw new RuntimeException("Student with this user already exists");
         });

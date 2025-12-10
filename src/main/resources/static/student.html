@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель ученика - EduPage</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>EduPage</h2>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('schedule')" class="active">Расписание</a></li>
+                    <li><a href="#" onclick="showSection('grades')">Оценки</a></li>
+                    <li><a href="#" onclick="showSection('attendance')">Посещаемость</a></li>
+                    <li><a href="#" onclick="showSection('homework')">Домашние задания</a></li>
+                    <li><a href="#" onclick="logout()">Выход</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Панель ученика</h1>
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <div class="notification-bell" onclick="showNotifications()">
+                        🔔
+                        <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">Выход</button>
+                </div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div id="schedule-section" class="section">
+                <div class="card">
+                    <h3>Мое расписание</h3>
+                    <div id="scheduleContent"></div>
+                </div>
+            </div>
+
+            <!-- Grades Section -->
+            <div id="grades-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Мои оценки</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Предмет</th>
+                                <th>Оценка</th>
+                                <th>Дата</th>
+                                <th>Комментарий</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gradesTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Attendance Section -->
+            <div id="attendance-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Моя посещаемость</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Предмет</th>
+                                <th>Статус</th>
+                                <th>Комментарий</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Homework Section -->
+            <div id="homework-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Домашние задания</h3>
+                    <div id="homeworkContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2/lib/stomp.min.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/student.js"></script>
+</body>
+</html>
+

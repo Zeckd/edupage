@@ -13,8 +13,8 @@ public interface LessonMapper {
 
     Lesson lessonCreateDtoToLesson(LessonCreateDto dto);
 
-    @Mapping(target = "groupName", expression = "java(lesson.getGroup() != null ? lesson.getGroup().getName() : null)")
-    @Mapping(target = "subjectName", expression = "java(lesson.getSubject() != null ? lesson.getSubject().getName() : null)")
-    @Mapping(target = "teacherName", expression = "java(lesson.getTeacher() != null ? lesson.getTeacher().getUser().getFirstName() + \" \" + lesson.getTeacher().getUser().getLastName() : null)")
+    @Mapping(target = "groupName", expression = "java(lesson.getGroup() != null ? lesson.getGroup().getName() : \"\")")
+    @Mapping(target = "subjectName", expression = "java(lesson.getSubject() != null ? lesson.getSubject().getName() : \"\")")
+    @Mapping(target = "teacherName", expression = "java(lesson.getTeacher() != null && lesson.getTeacher().getUser() != null ? lesson.getTeacher().getUser().getFirstName() + \" \" + lesson.getTeacher().getUser().getLastName() : \"\")")
     LessonDto lessonToLessonDto(Lesson lesson);
 }

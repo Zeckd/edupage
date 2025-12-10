@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ панель - EduPage</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>EduPage</h2>
+            <nav>
+                <ul>
+                    <li><a href="#" onclick="showSection('dashboard')" class="active">Дашборд</a></li>
+                    <li><a href="#" onclick="showSection('users')">Пользователи</a></li>
+                    <li><a href="#" onclick="showSection('register')">Создать пользователя</a></li>
+                    <li><a href="#" onclick="showSection('students')">Ученики</a></li>
+                    <li><a href="#" onclick="showSection('teachers')">Учителя</a></li>
+                    <li><a href="#" onclick="showSection('groups')">Группы</a></li>
+                    <li><a href="#" onclick="showSection('subjects')">Предметы</a></li>
+                    <li><a href="#" onclick="showSection('assignments')">Назначения</a></li>
+                    <li><a href="#" onclick="showSection('notifications')">Уведомления</a></li>
+                    <li><a href="#" onclick="logout()">Выход</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Админ панель</h1>
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <div class="notification-bell" onclick="showNotifications()">
+                        🔔
+                        <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">Выход</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Всего пользователей</h4>
+                        <div class="value" id="statUsers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Учеников</h4>
+                        <div class="value" id="statStudents">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Учителей</h4>
+                        <div class="value" id="statTeachers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Групп</h4>
+                        <div class="value" id="statGroups">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Все пользователи</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Имя пользователя</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Email</th>
+                                <th>Роль</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Register Section -->
+            <div id="register-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Создать нового пользователя</h3>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label>Имя пользователя</label>
+                            <input type="text" id="regUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Пароль</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Имя</label>
+                            <input type="text" id="regFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Фамилия</label>
+                            <input type="text" id="regLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Роль</label>
+                            <select id="regRole" required onchange="toggleRoleFields()">
+                                <option value="">Выберите роль</option>
+                                <option value="STUDENT">Ученик</option>
+                                <option value="TEACHER">Учитель</option>
+                                <option value="ADMIN">Администратор</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="groupIdGroup" style="display: none;">
+                            <label>Группа</label>
+                            <select id="regGroupId"></select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Создать пользователя</button>
+                        <div id="registerErrorMessage" class="error-message"></div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Students Section -->
+            <div id="students-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Ученики</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Группа</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Teachers Section -->
+            <div id="teachers-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Учителя</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                                <th>Email</th>
+                                <th>Дата найма</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Groups Section -->
+            <div id="groups-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Группы</h3>
+                    <button class="btn btn-success" onclick="showAddGroupModal()">Добавить группу</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="groupsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Subjects Section -->
+            <div id="subjects-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Предметы</h3>
+                    <button class="btn btn-success" onclick="showAddSubjectModal()">Добавить предмет</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjectsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Assignments Section -->
+            <div id="assignments-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Назначить учителя группе</h3>
+                    <form id="assignmentForm">
+                        <div class="form-group">
+                            <label>Учитель</label>
+                            <select id="assignmentTeacher" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Предмет</label>
+                            <select id="assignmentSubject" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Группа</label>
+                            <select id="assignmentGroup" required></select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Назначить</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div id="notifications-section" class="section" style="display: none;">
+                <div class="card">
+                    <h3>Отправить уведомление</h3>
+                    <form id="notificationForm">
+                        <div class="form-group">
+                            <label>Сообщение</label>
+                            <textarea id="notificationMessage" rows="4" required placeholder="Введите текст уведомления"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Кому отправить</label>
+                            <select id="notificationType" onchange="toggleNotificationFields()" required>
+                                <option value="">Выберите тип</option>
+                                <option value="role">Всем пользователям роли</option>
+                                <option value="user">Конкретному пользователю</option>
+                                <option value="group">Всем ученикам группы</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="notificationRoleGroup" style="display: none;">
+                            <label>Роль</label>
+                            <select id="notificationRole">
+                                <option value="STUDENT">Ученики</option>
+                                <option value="TEACHER">Учителя</option>
+                                <option value="ADMIN">Администраторы</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="notificationUserGroup" style="display: none;">
+                            <label>Пользователь</label>
+                            <select id="notificationUser"></select>
+                        </div>
+                        <div class="form-group" id="notificationGroupGroup" style="display: none;">
+                            <label>Группа</label>
+                            <select id="notificationGroup"></select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Отправить уведомление</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="addGroupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addGroupModal')">&times;</span>
+            <h2>Добавить группу</h2>
+            <form id="addGroupForm">
+                <div class="form-group">
+                    <label>Название группы</label>
+                    <input type="text" id="groupName" required>
+                </div>
+                <button type="submit" class="btn btn-success">Создать</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addSubjectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addSubjectModal')">&times;</span>
+            <h2>Добавить предмет</h2>
+            <form id="addSubjectForm">
+                <div class="form-group">
+                    <label>Название предмета</label>
+                    <input type="text" id="subjectName" required>
+                </div>
+                <button type="submit" class="btn btn-success">Создать</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/common.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>
+

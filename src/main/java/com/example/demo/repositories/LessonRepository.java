@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface LessonRepository extends JpaRepository<Lesson, Long> {
-    // Найти уроки группы за период
     List<Lesson> findByGroup_IdAndLessonDateTimeBetween(Long groupId, LocalDateTime start, LocalDateTime end);
-    // Найти уроки учителя за период
     List<Lesson> findByTeacher_IdAndLessonDateTimeBetween(Long teacherId, LocalDateTime start, LocalDateTime end);
 }

@@ -1,0 +1,9 @@
+/* Additional styles for student panel */
+.schedule-item {
+    background: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-left: 4px solid #667eea;
+}
+

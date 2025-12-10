@@ -26,16 +26,16 @@ public class Lesson {
     private LocalDateTime lessonDateTime;
     private int durationMinutes;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private ScheduleEntry scheduleEntry;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Group group;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Subject subject;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Teacher teacher;
 
     @OneToMany(mappedBy = "lesson")
