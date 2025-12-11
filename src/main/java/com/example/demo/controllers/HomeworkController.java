@@ -4,6 +4,7 @@ import com.example.demo.models.dtos.HomeworkDto;
 import com.example.demo.models.dtos.HomeworkRequestDto;
 import com.example.demo.services.HomeworkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,11 @@ public class HomeworkController {
     }
 
     @GetMapping("/lesson/{lessonId}")
-    public HomeworkDto getHomework(@PathVariable Long lessonId) {
-        return homeworkService.getHomeworkByLesson(lessonId);
+    public ResponseEntity<HomeworkDto> getHomework(@PathVariable Long lessonId) {
+        HomeworkDto homework = homeworkService.getHomeworkByLesson(lessonId);
+        if (homework == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(homework);
     }
 }

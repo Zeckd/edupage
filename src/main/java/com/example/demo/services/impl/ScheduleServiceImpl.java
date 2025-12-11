@@ -15,25 +15,21 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleEntryRepository scheduleEntryRepository;
-    private final ScheduleMapper scheduleMapper;
+    private final ScheduleMapper mapper = ScheduleMapper.INSTANCE;
 
     @Override
     public List<ScheduleEntryDto> getScheduleForGroup(Long groupId) {
-        List<ScheduleEntry> entries = scheduleEntryRepository
-                .findByGroupSubjectTeacher_GroupId(groupId);
-
-        return entries.stream()
-                .map(scheduleMapper::toScheduleEntryDto)
+        return scheduleEntryRepository.findByGroupSubjectTeacher_GroupId(groupId)
+                .stream()
+                .map(mapper::toScheduleEntryDto)
                 .toList();
     }
 
     @Override
     public List<ScheduleEntryDto> getScheduleForTeacher(Long teacherId) {
-        List<ScheduleEntry> entries = scheduleEntryRepository
-                .findByGroupSubjectTeacher_TeacherId(teacherId);
-
-        return entries.stream()
-                .map(scheduleMapper::toScheduleEntryDto)
+        return scheduleEntryRepository.findByGroupSubjectTeacher_TeacherId(teacherId)
+                .stream()
+                .map(mapper::toScheduleEntryDto)
                 .toList();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.models.Student;
+import com.example.demo.models.dtos.ScheduleEntryDto;
 import com.example.demo.models.dtos.StudentStatusDto;
 import com.example.demo.models.dtos.StudentAttendanceReportDto;
 import com.example.demo.models.dtos.StudentGradesListDto;
@@ -16,4 +17,11 @@ public interface StudentService {
     List<StudentGradesListDto> getStudentGrades(Long studentId);
     Student create(Long userId, Long groupId);
 
+    Student getProfile(String name);
+
+    List<?> getAttendance(String name);
+
+    List<?> getGrades(String name);
+
+    List<ScheduleEntryDto> getSchedule(String name);
 }

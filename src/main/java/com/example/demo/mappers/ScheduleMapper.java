@@ -1,14 +1,16 @@
 package com.example.demo.mappers;
 
-import com.example.demo.models.Lesson;
 import com.example.demo.models.ScheduleEntry;
-import com.example.demo.models.dtos.LessonListDto;
+import com.example.demo.models.Lesson;
 import com.example.demo.models.dtos.ScheduleEntryDto;
+import com.example.demo.models.dtos.LessonListDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface ScheduleMapper {
+    ScheduleMapper INSTANCE = Mappers.getMapper(ScheduleMapper.class);
 
     @Mapping(target = "scheduleId", expression = "java(entry.getId())")
     @Mapping(target = "subjectName", expression = "java(entry.getGroupSubjectTeacher().getSubject().getName())")
@@ -17,7 +19,6 @@ public interface ScheduleMapper {
             expression = "java(entry.getGroupSubjectTeacher().getTeacher().getUser().getFirstName() + \" \" + entry.getGroupSubjectTeacher().getTeacher().getUser().getLastName())")
     @Mapping(target = "teacherUserId", expression = "java(entry.getGroupSubjectTeacher().getTeacher().getUser().getId())")
     ScheduleEntryDto toScheduleEntryDto(ScheduleEntry entry);
-
 
     @Mapping(target = "subjectName", expression = "java(lesson.getSubject().getName())")
     @Mapping(target = "groupName", expression = "java(lesson.getGroup().getName())")

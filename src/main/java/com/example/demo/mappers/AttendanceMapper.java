@@ -7,12 +7,10 @@ import com.example.demo.models.dtos.LessonAttendanceDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public interface AttendanceMapper {
-
     AttendanceMapper INSTANCE = Mappers.getMapper(AttendanceMapper.class);
 
     @Mapping(target = "studentId", source = "student.id")
@@ -27,11 +25,10 @@ public interface AttendanceMapper {
     @Mapping(target = "groupName", source = "lesson.group.name")
     @Mapping(target = "lessonDateTime", source = "lesson.lessonDateTime")
     LessonAttendanceDto toLessonAttendanceDto(Attendance attendance);
+
     @Mapping(target = "lessonDateTime", source = "lesson.lessonDateTime")
     @Mapping(target = "subjectName", source = "lesson.subject.name")
     @Mapping(target = "teacherFullName",
             expression = "java(att.getLesson().getTeacher().getUser().getFirstName() + \" \" + att.getLesson().getTeacher().getUser().getLastName())")
-    @Mapping(target = "status", source = "status")
-    @Mapping(target = "comment", source = "comment")
     StudentAttendanceReportDto toStudentAttendanceReportDto(Attendance att);
 }

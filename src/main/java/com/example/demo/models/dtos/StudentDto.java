@@ -1,15 +1,13 @@
 package com.example.demo.models.dtos;
 
 import lombok.Data;
-import java.time.LocalDate;
 
 @Data
-public class TeacherDto {
+public class StudentDto {
     private Long id;
-    private Long userId;
     private String firstName;
     private String lastName;
     private String email;
-    private LocalDate hireDate;
-    private String description;
+    private String groupName;
 }
+

@@ -5,9 +5,9 @@ import com.example.demo.models.dtos.StudentGradesListDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-@Mapper(componentModel = "spring")
-public interface GradeMapper {
 
+@Mapper
+public interface GradeMapper {
     GradeMapper INSTANCE = Mappers.getMapper(GradeMapper.class);
 
     @Mapping(target = "subjectName", expression = "java(grade.getLesson().getSubject().getName())")

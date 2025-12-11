@@ -24,7 +24,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final LessonRepository lessonRepository;
     private final StudentRepository studentRepository;
-    private final AttendanceMapper attendanceMapper;
+
+    private final AttendanceMapper attendanceMapper = AttendanceMapper.INSTANCE;
 
     @Override
     public void setAttendance(AttendanceRequestDto dto) {
@@ -34,6 +35,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         dto.getStudents().forEach(st -> {
             Student student = studentRepository.findById(st.getStudentId())
                     .orElseThrow(() -> new RuntimeException("Student not found"));
+
             Attendance attendance = attendanceRepository
                     .findByLessonIdAndStudentId(lesson.getId(), student.getId())
                     .orElseGet(() -> attendanceRepository.save(
@@ -43,7 +45,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                                     .status(AttendanceStatus.PRESENT)
                                     .build()
                     ));
-
 
             attendance.setStatus(st.getStatus());
             attendance.setComment(st.getComment());
@@ -70,13 +71,13 @@ public class AttendanceServiceImpl implements AttendanceService {
                 StudentStatusDto statusDto = new StudentStatusDto();
                 statusDto.setStudentId(student.getId());
                 statusDto.setStudentFullName(student.getUser().getFirstName() + " " + student.getUser().getLastName());
-                statusDto.setStatus(com.example.demo.enums.AttendanceStatus.PRESENT);
+                statusDto.setStatus(AttendanceStatus.PRESENT);
                 return statusDto;
             }).toList());
         } else {
             dto.setStudents(attendanceMapper.toStudentStatusList(attendances));
         }
-        
+
         return dto;
     }
 

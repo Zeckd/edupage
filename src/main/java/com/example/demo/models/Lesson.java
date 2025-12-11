@@ -10,12 +10,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// Факт проведенного занятия
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Lesson {
@@ -26,24 +26,31 @@ public class Lesson {
     private LocalDateTime lessonDateTime;
     private int durationMinutes;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JsonIgnore
     private ScheduleEntry scheduleEntry;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JsonIgnore
     private Group group;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JsonIgnore
     private Subject subject;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
+    @JsonIgnore
     private Teacher teacher;
 
     @OneToMany(mappedBy = "lesson")
+    @JsonIgnore
     private List<Attendance> attendances;
 
     @OneToMany(mappedBy = "lesson")
+    @JsonIgnore
     private List<Grade> grades;
 
     @OneToOne(mappedBy = "lesson")
+    @JsonIgnore
     private Homework homework;
 }

@@ -8,10 +8,19 @@ if (!token || !currentUser.role) {
 }
 
 function getAuthHeaders() {
-    return {
-        'Authorization': `Bearer ${token}`,
+    const currentToken = localStorage.getItem('token');
+    if (!currentToken) {
+        console.error('Token not found in localStorage');
+        // Если токена нет, все равно возвращаем заголовки, но без токена
+        // Это позволит серверу вернуть 401, который будет обработан перехватчиком
+    }
+    const headers = {
         'Content-Type': 'application/json'
     };
+    if (currentToken) {
+        headers['Authorization'] = `Bearer ${currentToken}`;
+    }
+    return headers;
 }
 
 // Перехватываем все fetch запросы для обработки ошибок авторизации
@@ -19,13 +28,22 @@ const originalFetch = window.fetch;
 window.fetch = async function(...args) {
     const response = await originalFetch(...args);
     
-    // Если получили 401 или 403, значит токен невалиден
+    // Если получили 401 или 403, значит токен невалиден или нет доступа
+    // НЕ делаем редирект для запросов к API, которые могут обработать ошибку сами
     if (response.status === 401 || response.status === 403) {
-        // Очищаем токен и перенаправляем на страницу входа
-        localStorage.removeItem('token');
-        localStorage.removeItem('currentUser');
-        if (!window.location.pathname.includes('index.html')) {
-            window.location.href = '/index.html';
+        const url = args[0];
+        // Проверяем, это запрос к API или нет
+        if (typeof url === 'string' && url.startsWith('/api/')) {
+            // Для API запросов не делаем автоматический редирект
+            // Пусть обработчик запроса сам решает, что делать
+            console.warn('Unauthorized or Forbidden response:', url, response.status);
+        } else {
+            // Для не-API запросов делаем редирект
+            localStorage.removeItem('token');
+            localStorage.removeItem('currentUser');
+            if (!window.location.pathname.includes('index.html')) {
+                window.location.href = '/index.html';
+            }
         }
     }
     

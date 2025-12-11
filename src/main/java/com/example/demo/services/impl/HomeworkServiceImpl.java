@@ -19,11 +19,11 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     private final HomeworkRepository homeworkRepository;
     private final LessonRepository lessonRepository;
-    private final HomeworkMapper homeworkMapper;
+
+    private final HomeworkMapper mapper = HomeworkMapper.INSTANCE;
 
     @Override
     public HomeworkDto setHomework(Long lessonId, HomeworkRequestDto dto) {
-
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
@@ -34,14 +34,13 @@ public class HomeworkServiceImpl implements HomeworkService {
                 .build();
 
         hw = homeworkRepository.save(hw);
-
-        return homeworkMapper.toDto(hw);
+        return mapper.toDto(hw);
     }
 
     @Override
     public HomeworkDto getHomeworkByLesson(Long lessonId) {
         return homeworkRepository.findByLessonId(lessonId)
-                .map(homeworkMapper::toDto)
+                .map(mapper::toDto)
                 .orElse(null);
     }
 }

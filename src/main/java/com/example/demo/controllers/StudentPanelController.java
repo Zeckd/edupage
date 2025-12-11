@@ -14,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/api/student")
 @RequiredArgsConstructor
@@ -22,44 +21,28 @@ import java.util.List;
 public class StudentPanelController {
 
     private final StudentService studentService;
-    private final ScheduleService scheduleService;
-    private final UserRepository userRepository;
-    private final StudentRepository studentRepository;
 
     @GetMapping("/profile")
     public ResponseEntity<Student> getMyProfile(Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Student student = studentRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentService.getProfile(authentication.getName()));
     }
 
     @GetMapping("/attendance")
-    public ResponseEntity<List<?>> getMyAttendance(Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Student student = studentRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        return ResponseEntity.ok((List<?>) studentService.getStudentAttendance(student.getId()));
+    public ResponseEntity<?> getMyAttendance(Authentication authentication) {
+        try {
+            return ResponseEntity.ok(studentService.getAttendance(authentication.getName()));
+        } catch (Exception e) {
+            return ResponseEntity.ok(List.of());
+        }
     }
 
     @GetMapping("/grades")
     public ResponseEntity<List<?>> getMyGrades(Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Student student = studentRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        return ResponseEntity.ok((List<?>) studentService.getStudentGrades(student.getId()));
+        return ResponseEntity.ok(studentService.getGrades(authentication.getName()));
     }
 
     @GetMapping("/schedule")
     public ResponseEntity<List<ScheduleEntryDto>> getMySchedule(Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        Student student = studentRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        return ResponseEntity.ok(scheduleService.getScheduleForGroup(student.getGroup().getId()));
+        return ResponseEntity.ok(studentService.getSchedule(authentication.getName()));
     }
 }
-

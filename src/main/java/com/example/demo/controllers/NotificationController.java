@@ -54,7 +54,6 @@ public class NotificationController {
         return ResponseEntity.ok().build();
     }
 
-    // Отправка уведомления конкретному пользователю (для админа и учителей)
     @PostMapping("/send")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<Map<String, String>> sendNotification(@RequestBody NotificationRequestDto dto) {

@@ -80,23 +80,37 @@ async function loadAttendance() {
             headers: getAuthHeaders()
         });
         if (response.ok) {
-            const attendances = await response.json();
-            const tbody = document.getElementById('attendanceTableBody');
-            if (attendances.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4">Нет данных о посещаемости</td></tr>';
-            } else {
-                tbody.innerHTML = attendances.map(att => `
-                    <tr>
-                        <td>${att.lessonDateTime ? new Date(att.lessonDateTime).toLocaleDateString('ru-RU') : 'N/A'}</td>
-                        <td>${att.subjectName || 'N/A'}</td>
-                        <td>${att.status || 'N/A'}</td>
-                        <td>${att.comment || ''}</td>
-                    </tr>
-                `).join('');
+            const text = await response.text();
+            if (!text || !text.trim()) {
+                document.getElementById('attendanceTableBody').innerHTML = '<tr><td colspan="4">Нет данных о посещаемости</td></tr>';
+                return;
             }
+            try {
+                const attendances = JSON.parse(text);
+                const tbody = document.getElementById('attendanceTableBody');
+                if (!attendances || attendances.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4">Нет данных о посещаемости</td></tr>';
+                } else {
+                    tbody.innerHTML = attendances.map(att => `
+                        <tr>
+                            <td>${att.lessonDateTime ? new Date(att.lessonDateTime).toLocaleDateString('ru-RU') : 'N/A'}</td>
+                            <td>${att.subjectName || 'N/A'}</td>
+                            <td>${att.status || 'N/A'}</td>
+                            <td>${att.comment || ''}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (parseError) {
+                console.error('Error parsing attendance JSON:', parseError, 'Response:', text);
+                document.getElementById('attendanceTableBody').innerHTML = '<tr><td colspan="4">Ошибка загрузки данных</td></tr>';
+            }
+        } else {
+            console.error('Failed to load attendance:', response.status);
+            document.getElementById('attendanceTableBody').innerHTML = '<tr><td colspan="4">Ошибка загрузки данных</td></tr>';
         }
     } catch (error) {
         console.error('Error loading attendance:', error);
+        document.getElementById('attendanceTableBody').innerHTML = '<tr><td colspan="4">Ошибка загрузки данных</td></tr>';
     }
 }
 

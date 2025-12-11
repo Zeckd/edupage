@@ -322,8 +322,16 @@ async function loadHomeworkForLesson() {
             headers: getAuthHeaders()
         });
         if (response.ok) {
-            const homework = await response.json();
-            displayHomework(homework);
+            const text = await response.text();
+            if (text && text.trim()) {
+                const homework = JSON.parse(text);
+                displayHomework(homework);
+            } else {
+                document.getElementById('homeworkContent').innerHTML = `
+                    <p>Домашнее задание не задано</p>
+                    <button class="btn btn-success" onclick="setHomework(${lessonId})">Задать домашнее задание</button>
+                `;
+            }
         } else if (response.status === 404) {
             document.getElementById('homeworkContent').innerHTML = `
                 <p>Домашнее задание не задано</p>
@@ -332,6 +340,10 @@ async function loadHomeworkForLesson() {
         }
     } catch (error) {
         console.error('Error loading homework:', error);
+        document.getElementById('homeworkContent').innerHTML = `
+            <p>Домашнее задание не задано</p>
+            <button class="btn btn-success" onclick="setHomework(${lessonId})">Задать домашнее задание</button>
+        `;
     }
 }
 
@@ -354,8 +366,8 @@ function showAddLessonModal() {
 async function loadGroupsAndSubjects() {
     try {
         const [groupsRes, subjectsRes] = await Promise.all([
-            fetch(`${API_BASE}/admin/groups`, { headers: getAuthHeaders() }),
-            fetch(`${API_BASE}/admin/subjects`, { headers: getAuthHeaders() })
+            fetch(`${API_BASE}/groups`, { headers: getAuthHeaders() }),
+            fetch(`${API_BASE}/subjects`, { headers: getAuthHeaders() })
         ]);
         
         if (groupsRes.ok) {
@@ -408,6 +420,7 @@ document.getElementById('addLessonForm').addEventListener('submit', async (e) =>
             headers: getAuthHeaders(),
             body: JSON.stringify(lessonData)
         });
+        
         if (response.ok) {
             alert('Урок успешно создан!');
             closeModal('addLessonModal');
@@ -415,9 +428,17 @@ document.getElementById('addLessonForm').addEventListener('submit', async (e) =>
             loadLessonsForSelects();
             loadSchedule();
             document.getElementById('addLessonForm').reset();
+        } else if (response.status === 401 || response.status === 403) {
+            // Токен невалиден или нет доступа - редирект на авторизацию
+            localStorage.removeItem('token');
+            localStorage.removeItem('currentUser');
+            alert('Сессия истекла. Пожалуйста, войдите снова.');
+            window.location.href = '/index.html';
         } else {
+            // Другие ошибки сервера (400, 500 и т.д.)
             const error = await response.json().catch(() => ({message: 'Не удалось создать урок'}));
-            alert('Ошибка: ' + (error.message || 'Не удалось создать урок'));
+            alert('Ошибка: ' + (error.message || 'Не удалось создать урок. Проверьте, что все поля заполнены правильно.'));
+            console.error('Error creating lesson:', response.status, error);
         }
     } catch (error) {
         console.error('Error creating lesson:', error);
@@ -433,9 +454,17 @@ function viewLesson(lessonId) {
 
 function setHomework(lessonId) {
     const description = prompt('Введите описание домашнего задания:');
-    const deadline = prompt('Введите срок сдачи (YYYY-MM-DD HH:mm):');
+    const deadlineInput = prompt('Введите срок сдачи (YYYY-MM-DD HH:mm):');
     
-    if (description && deadline) {
+    if (description && deadlineInput) {
+        let deadline = deadlineInput;
+        if (!deadline.includes('T')) {
+            deadline = deadline.replace(' ', 'T');
+        }
+        if (!deadline.includes(':')) {
+            deadline += ':00';
+        }
+        
         fetch(`${API_BASE}/homework/set/${lessonId}`, {
             method: 'POST',
             headers: getAuthHeaders(),
@@ -445,8 +474,18 @@ function setHomework(lessonId) {
             })
         }).then(response => {
             if (response.ok) {
-                loadHomeworkForLesson();
+                alert('Домашнее задание успешно задано!');
+                loadHomeworkForLesson(lessonId);
+            } else {
+                response.json().then(error => {
+                    alert('Ошибка: ' + (error.message || 'Не удалось задать домашнее задание'));
+                }).catch(() => {
+                    alert('Ошибка: Не удалось задать домашнее задание');
+                });
             }
+        }).catch(error => {
+            console.error('Error setting homework:', error);
+            alert('Ошибка при задании домашнего задания');
         });
     }
 }

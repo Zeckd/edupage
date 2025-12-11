@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalTime;
 
-// Элемент расписания (шаблон)
 @Entity
 @Table(name = "schedule_entries")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder

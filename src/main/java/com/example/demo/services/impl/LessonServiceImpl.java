@@ -28,22 +28,12 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public LessonDto create(LessonCreateDto dto) {
 
-        Lesson lesson = Lesson.builder()
-                .lessonDateTime(dto.getLessonDateTime())
-                .durationMinutes(dto.getDurationMinutes())
-                .build();
+        Lesson lesson = LessonMapper.INSTANCE.lessonCreateDtoToLesson(dto);
 
-        if (dto.getScheduleEntryId() != null) {
-            lesson.setScheduleEntry(scheduleEntryRepository.findById(dto.getScheduleEntryId())
-                    .orElse(null));
-        }
-
-        lesson.setGroup(groupRepository.findById(dto.getGroupId())
-                .orElseThrow(() -> new RuntimeException("Group not found")));
-        lesson.setSubject(subjectRepository.findById(dto.getSubjectId())
-                .orElseThrow(() -> new RuntimeException("Subject not found")));
-        lesson.setTeacher(teacherRepository.findById(dto.getTeacherId())
-                .orElseThrow(() -> new RuntimeException("Teacher not found")));
+        lesson.setScheduleEntry(scheduleEntryRepository.findById(dto.getScheduleEntryId()).orElseThrow());
+        lesson.setGroup(groupRepository.findById(dto.getGroupId()).orElseThrow());
+        lesson.setSubject(subjectRepository.findById(dto.getSubjectId()).orElseThrow());
+        lesson.setTeacher(teacherRepository.findById(dto.getTeacherId()).orElseThrow());
 
         final Lesson savedLesson = lessonRepository.save(lesson);
 

@@ -3,7 +3,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
 
-// Связка: Кто (Teacher) -> Что (Subject) -> Кого (Group) учит
 @Entity
 @Table(name = "group_subject_teacher")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder

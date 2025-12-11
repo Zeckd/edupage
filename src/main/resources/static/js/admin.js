@@ -76,10 +76,10 @@ async function loadStudents() {
             tbody.innerHTML = students.map(student => `
                 <tr>
                     <td>${student.id}</td>
-                    <td>${student.user.firstName}</td>
-                    <td>${student.user.lastName}</td>
-                    <td>${student.group.name}</td>
-                    <td>${student.user.email}</td>
+                    <td>${student.firstName || 'N/A'}</td>
+                    <td>${student.lastName || 'N/A'}</td>
+                    <td>${student.groupName || 'N/A'}</td>
+                    <td>${student.email || 'N/A'}</td>
                 </tr>
             `).join('');
         }
@@ -97,13 +97,12 @@ async function loadTeachers() {
             const teachers = await response.json();
             const tbody = document.getElementById('teachersTableBody');
             tbody.innerHTML = teachers.map(teacher => {
-                const user = teacher.user || {};
                 return `
                 <tr>
                     <td>${teacher.id}</td>
-                    <td>${user.firstName || 'N/A'}</td>
-                    <td>${user.lastName || 'N/A'}</td>
-                    <td>${user.email || 'N/A'}</td>
+                    <td>${teacher.firstName || 'N/A'}</td>
+                    <td>${teacher.lastName || 'N/A'}</td>
+                    <td>${teacher.email || 'N/A'}</td>
                     <td>${teacher.hireDate || 'N/A'}</td>
                 </tr>
             `;
